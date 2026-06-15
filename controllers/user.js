@@ -23,9 +23,9 @@ export const createUser = async (req, res) => {
 //Get user
 export const getUsers = async (req, res) => {
   try {
-    const user = await user.find().sort({ createdAt: -1 });
+    const userData = await user.find().sort({ createdAt: -1 });
 
-    res.status(200).json({ user });
+    res.status(200).json({ userData });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "failed" });
@@ -36,12 +36,12 @@ export const getUsers = async (req, res) => {
 export const getUsersById = async (req, res) => {
   const { id } = req.params;
   try {
-    const user = await user.findById(id);
+    const userData = await user.findById(id);
 
-    if (!user) {
+    if (!userData) {
       return res.status(404).json({ message: "User Not Found" });
     }
-    res.status(200).json(user);
+    res.status(200).json(userData);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
