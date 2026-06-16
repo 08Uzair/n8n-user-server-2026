@@ -52,26 +52,39 @@ export const getUsersById = async (req, res) => {
 export const updateUser = async (req, res) => {
   const { id } = req.params;
   const { name, email, address, status } = req.body;
+
   try {
-    const updatedata = {
+    const updatedData = {
       name,
       email,
       address,
       status,
     };
-    const updateduser = await user.findByIdAndUpdate(id, updatedata, {
-      new: true,
+
+    const updatedUser = await user.findByIdAndUpdate(
+      id,
+      updatedData,
+      {
+        returnDocument: "after",
+      }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        message: "User Not Found",
+      });
+    }
+
+    res.status(200).json({
+      updateMember: updatedUser,
+      message: "Updated Successfully",
     });
 
-    if (!updateduser) {
-      return res.status(404).json({ message: "User Not Found" });
-    }
-    res
-      .status(200)
-      .json({ updateMember: updateuser, message: "Added Sucessfully" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: `${error}` });
+    res.status(500).json({
+      message: error.message,
+    });
   }
 };
 
